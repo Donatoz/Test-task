@@ -6,7 +6,7 @@ using System;
 [Serializable]
 public class PlayerData : ActorData
 {
-    public List<string> Inventory;
+    public List<string> Inventory = new List<string>();
 
     public override string ToString()
     {

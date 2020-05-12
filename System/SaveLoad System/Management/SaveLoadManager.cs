@@ -10,6 +10,7 @@ using System;
 public class SaveLoadManager : MonoBehaviour
 {
     #region Singleton
+    // Light version of Singleton
     private SaveLoadManager() { }
 
     public static SaveLoadManager Instance => GameObject.Find("GameManagers").GetComponent<SaveLoadManager>();
@@ -101,10 +102,15 @@ public class SaveLoadManager : MonoBehaviour
         testStats["Health"] = 10;
         List<string> testInventory = new List<string> { "Item1", "Item2" };
         List<EntityData> entitiesList = new List<EntityData> { new ActorData() { Name = "SomeActor", ReferenceId = "123", Stats = testStats } };
-        dataBuffer.Add(new EntityData() { Name = "Ent1", ReferenceId = "1" });
-        dataBuffer.Add(new ActorData() { Name = "Actor", ReferenceId = "Ac1", Stats = testStats });
-        dataBuffer.Add(new PlayerData() { Name = "Player", ReferenceId = "Pl1", Stats = testStats, Inventory = testInventory });
-        dataBuffer.Add(new NpcData() { Name = "Npc", ReferenceId = "Np1", Stats = testStats, SomeList = entitiesList });
+        var someData = new EntityData() { Name = "ToDelete", ReferenceId = "0" };
+        AddSaveData(someData);
+        AddSaveData(
+            new EntityData() { Name = "Ent1", ReferenceId = "1" },
+            new ActorData() { Name = "Actor", ReferenceId = "Ac1", Stats = testStats },
+            new PlayerData() { Name = "Player", ReferenceId = "Pl1", Stats = testStats, Inventory = testInventory },
+            new NpcData() { Name = "Npc", ReferenceId = "Np1", Stats = testStats, SomeList = entitiesList }
+        );
+        RemoveSaveData(someData);
         Section unnecessarySection = new Section("Unnecessary", new List<EntityData> { new EntityData() { Name = "Ent3", ReferenceId = "3" } });
         Section otherSection = new Section("Other", new List<EntityData> { new EntityData() { Name = "Ent4", ReferenceId = "4" } });
 
