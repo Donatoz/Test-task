@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 
 /// <summary>
-/// Manager that handles saving, loading and creating savefiles.
+/// Manager that handles saving, loading and creating <see cref="SaveFile"/>'s.
 /// </summary>
 public class SaveLoadManager : MonoBehaviour
 {
@@ -101,7 +101,7 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Write savefile (if savefile doesn't exist - create one) to the savefiles path.
+    /// Write <see cref="SaveFile"/> (if savefile doesn't exist - create one) to the savefiles path.
     /// </summary>
     /// <param name="save">Savefile to write</param>
     public void WriteSave(SaveFile save)
@@ -113,7 +113,7 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Load savefile (if exists) from savefiles path.
+    /// Load <see cref="SaveFile"/> (if exists) from savefiles path.
     /// </summary>
     /// <param name="saveName">Savefile name</param>
     public void LoadSave(string saveName)

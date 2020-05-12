@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Save builder.
+/// <see cref="SaveFile"/> builder.
 /// </summary>
 public class SaveFileBuilder
 {
@@ -22,7 +22,7 @@ public class SaveFileBuilder
     }
 
     /// <summary>
-    /// Add new section to the savefile (only if savefile doesn't already contain such section).
+    /// Add new <see cref="Section"/> to the <see cref="SaveFile"/> (only if savefile doesn't already contain such section).
     /// </summary>
     /// <param name="section">Section to add</param>
     /// <returns></returns>
@@ -33,7 +33,7 @@ public class SaveFileBuilder
     }
 
     /// <summary>
-    /// Build savefile.
+    /// Build new <see cref="SaveFile"/>.
     /// </summary>
     /// <returns></returns>
     public SaveFile Build()

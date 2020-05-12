@@ -5,12 +5,12 @@ using System.Runtime.Serialization;
 using UnityEngine;
 
 /// <summary>
-/// Special data serializer which serializes data in binary format and encodes it to base64.
+/// Special serializer which serializes/deserializes data.
 /// </summary>
 public static class DataSerializer
 {
     /// <summary>
-    /// Convert object into base64 string.
+    /// Convert <see cref="object"/> into base64 string.
     /// </summary>
     /// <param name="obj">Object to convert</param>
     /// <returns>Covnerted object as string</returns>
@@ -27,7 +27,7 @@ public static class DataSerializer
     }
 
     /// <summary>
-    /// Deserialize object from base64 string.
+    /// Deserialize <see cref="object"/> from base64 string.
     /// </summary>
     /// <typeparam name="T">Final object type</typeparam>
     /// <param name="data">Base64 string</param>

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Savedata container which holds sections with entity data.
+/// Savedata container which holds <see cref="Section"/>'s with <see cref="EntityData"/> in them.
 /// </summary>
 [System.Serializable]
 public class SaveFile
@@ -26,7 +26,7 @@ public class SaveFile
     #endregion
 
     /// <summary>
-    /// Add new section to the savefile.
+    /// Add new <see cref="Section"/> to the savefile.
     /// </summary>
     /// <param name="section"></param>
     public void AddSection(Section section)
@@ -35,7 +35,7 @@ public class SaveFile
     }
 
     /// <summary>
-    /// Remove section from the savefile.
+    /// Remove <see cref="Section"/> from the savefile.
     /// </summary>
     /// <param name="sectionId">Section-to-remove id</param>
     public void RemoveSection(string sectionId)
