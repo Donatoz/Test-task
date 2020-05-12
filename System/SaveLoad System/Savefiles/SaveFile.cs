@@ -33,6 +33,7 @@ public class SaveFile
     public void AddSection(Section section)
     {
         sections.Add(section);
+        Debug.Log($"Section {section.SectionId} was added to {Name}");
     }
 
     /// <summary>
@@ -45,6 +46,17 @@ public class SaveFile
         var section = sections.Find(x => x.SectionId == sectionId);
         if (section.Equals(default)) return;
         sections.Remove(section);
+        Debug.Log($"Section {section.SectionId} was removed from {Name}");
+    }
+
+    /// <summary>
+    /// Get <see cref="Section"/> by id.
+    /// </summary>
+    /// <param name="sectionId">Section id</param>
+    /// <returns></returns>
+    public Section FindSection(string sectionId)
+    {
+        return sections.Find(x => x.SectionId == sectionId);
     }
 
     /// <summary>

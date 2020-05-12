@@ -32,6 +32,12 @@ public class SaveFileBuilder
         return this;
     }
 
+    public SaveFileBuilder Rename(string name)
+    {
+        save.Name = name;
+        return this;
+    }
+
     /// <summary>
     /// Build new <see cref="SaveFile"/>.
     /// </summary>

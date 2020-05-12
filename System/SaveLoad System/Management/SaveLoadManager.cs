@@ -106,15 +106,12 @@ public class SaveLoadManager : MonoBehaviour
         SaveFile save = CreateSaveFile("SomeSavefile", dataBuffer, unnecessarySection);
         WriteSave(save, true);
         LoadSave("SomeSavefile");
-        Debug.Log(CurrentSave.Name);
-        Debug.Log(CurrentSave.GetAllSections().Count);
 
         CurrentSave.RemoveSection("Unnecessary");
         CurrentSave.AddSection(otherSection);
 
         WriteSave(CurrentSave, true);
         LoadSave("SomeSavefile");
-        Debug.Log(CurrentSave.GetAllSections()[0].GetAllDataOfType<ActorData>()[0].Stats["Health"]);
     }
 
     /// <summary>
@@ -126,13 +123,12 @@ public class SaveLoadManager : MonoBehaviour
     /// <returns></returns>
     public SaveFile CreateSaveFile(string saveName, List<EntityData> mainSectionContent, params Section[] sections)
     {
+        if (saveName == string.Empty) saveName = "Default";
         SaveFileBuilder builder = new SaveFileBuilder();
-        builder.AddSection(new Section(MAIN_SECTION_NAME, mainSectionContent));
+        builder.Rename(saveName).AddSection(new Section(MAIN_SECTION_NAME, mainSectionContent));
         sections.ToList().ForEach(x => builder.AddSection(x));
 
         SaveFile save = builder.Build();
-        if (saveName == string.Empty) saveName = "Default";
-        save.Name = saveName;
         return save;
     }
 
@@ -152,6 +148,7 @@ public class SaveLoadManager : MonoBehaviour
         }
         File.Delete(fileName);
         OnFileDeletingComplete?.Invoke("File was successfuly deleted.");
+        Debug.Log($"Savefile {saveName} was deleted.");
         return true;
     }
 
@@ -199,6 +196,7 @@ public class SaveLoadManager : MonoBehaviour
         {
             CurrentSave = DataSerializer.DeserializeObject<SaveFile>(data);
             OnFileLoadingComplete?.Invoke("Savefile loaded.");
+            Debug.Log($"Savefile {CurrentSave.Name} was loaded");
             return true;
         }
         catch (Exception e)
