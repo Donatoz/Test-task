@@ -150,6 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca13018da754d8d4381d9645ce76da9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SaveFilesPath: 
+  CurrentSave:
+    Name: 
 --- !u!4 &676615091
 Transform:
   m_ObjectHideFlags: 0

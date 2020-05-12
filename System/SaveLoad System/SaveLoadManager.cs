@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using System;
 
 /// <summary>
 /// Manager that handles saving, loading and creating <see cref="SaveFile"/>'s.
@@ -45,6 +46,40 @@ public class SaveLoadManager : MonoBehaviour
 
     #endregion
 
+    #region Events
+
+    /// <summary>
+    /// Invokes when <see cref="SaveFile"/> loading fails.
+    /// </summary>
+    public Action<string> OnFileLoadingFail;
+
+    /// <summary>
+    /// Invokes when <see cref="SaveFile"/> loading is complete.
+    /// </summary>
+    public Action<string> OnFileLoadingComplete;
+
+    /// <summary>
+    /// Invokes when <see cref="SaveFile"/> deletion fails.
+    /// </summary>
+    public Action<string> OnFileDeletingFail;
+
+    /// <summary>
+    /// Invokes when <see cref="SaveFile"/> deletion is complete.
+    /// </summary>
+    public Action<string> OnFileDeletingComplete;
+
+    /// <summary>
+    /// Invokes when <see cref="SaveFile"/> writing fails.
+    /// </summary>
+    public Action<string> OnFileWritingFail;
+
+    /// <summary>
+    /// Invokes when <see cref="SaveFile"/> writing is complete.
+    /// </summary>
+    public Action<string> OnFileWritingComplete;
+
+    #endregion
+
     private void Awake()
     {
         // Check "Assets/StreamingAssets" folder for savefile
@@ -83,7 +118,7 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Create new savefile with name and some sections (if provided).
+    /// Create new <see cref="SaveFile"/> with name and some sections (if provided).
     /// </summary>
     /// <param name="saveName">Name of the new savefile</param>
     /// <param name="mainSectionContent">Content of the main section</param>
@@ -96,8 +131,28 @@ public class SaveLoadManager : MonoBehaviour
         sections.ToList().ForEach(x => builder.AddSection(x));
 
         SaveFile save = builder.Build();
+        if (saveName == string.Empty) saveName = "Default";
         save.Name = saveName;
         return save;
+    }
+
+    /// <summary>
+    /// Delete existing <see cref="SaveFile"/>.
+    /// </summary>
+    /// <param name="saveName"></param>
+    /// <returns></returns>
+    public bool DeleteSaveFile(string saveName)
+    {
+        var fileName = SaveFilesPath + saveName + ".txt";
+        if (!File.Exists(fileName))
+        {
+            Debug.LogWarning("No such file exists.");
+            OnFileDeletingFail?.Invoke("No such file exists.");
+            return false;
+        }
+        File.Delete(fileName);
+        OnFileDeletingComplete?.Invoke("File was successfuly deleted.");
+        return true;
     }
 
     /// <summary>
@@ -106,20 +161,46 @@ public class SaveLoadManager : MonoBehaviour
     /// <param name="save">Savefile to write</param>
     public void WriteSave(SaveFile save)
     {
+        if (save == null)
+        {
+            Debug.LogWarning("Savefile can't be null.");
+            OnFileWritingFail?.Invoke("Savefile can't be null.");
+            return;
+        }
         string data = DataSerializer.SerializeObject(save);
         if (!Directory.Exists(SaveFilesPath))
             Directory.CreateDirectory(SaveFilesPath);
         File.WriteAllText(SaveFilesPath + save.Name + ".txt", data);
+        OnFileWritingComplete?.Invoke("File was successfuly writen.");
     }
 
     /// <summary>
     /// Load <see cref="SaveFile"/> (if exists) from savefiles path.
     /// </summary>
     /// <param name="saveName">Savefile name</param>
-    public void LoadSave(string saveName)
+    public bool LoadSave(string saveName)
     {
-        string data = File.ReadAllText(SaveFilesPath + saveName + ".txt");
-        CurrentSave = DataSerializer.DeserializeObject<SaveFile>(data);
+        var fileName = SaveFilesPath + saveName + ".txt";
+        if (!File.Exists(fileName))
+        {
+            Debug.LogWarning("No such savefile exists.");
+            OnFileLoadingFail?.Invoke("No such savefile exists.");
+            return false;
+        }
+
+        var data = File.ReadAllText(fileName);
+        try
+        {
+            CurrentSave = DataSerializer.DeserializeObject<SaveFile>(data);
+            OnFileLoadingComplete?.Invoke("Savefile loaded.");
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error appeared during savefile loading. Error message:\n" + e.Message);
+            OnFileLoadingFail?.Invoke("Error appeared during savefile loading.");
+            return false;
+        }
     }
 
     /// <summary>
