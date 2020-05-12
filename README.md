@@ -1,4 +1,6 @@
 # Test task
+[![](https://img.shields.io/github/v/release/Donatoz/Test-task?include_prereleases&style=for-the-badge)](https://github.com/Donatoz/Test-task/releases/tag/v1.0.0)
+
  Test tasks for the position "Unity developer"
  
  Note: kigris is my local git username on my PC.
