@@ -19,6 +19,7 @@ public struct Section
 
     #region Private_Members
 
+    [UnityEngine.SerializeField]
     /// <summary>
     /// Section content.
     /// </summary>

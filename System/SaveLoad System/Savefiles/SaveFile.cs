@@ -18,6 +18,7 @@ public class SaveFile
 
     #region Private_Members
 
+    [SerializeField]
     /// <summary>
     /// All savefile sections.
     /// </summary>
@@ -53,5 +54,16 @@ public class SaveFile
     public IReadOnlyList<Section> GetAllSections()
     {
         return sections.AsReadOnly();
+    }
+
+    /// <summary>
+    /// Serialize savefile in json format.
+    /// </summary>
+    /// <param name="encrypt">Do we need data to be encrypted?</param>
+    /// <returns></returns>
+    public string ToJson(bool encrypt)
+    {
+        string json = JsonUtility.ToJson(this, true);
+        return encrypt ? System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json)) : json;
     }
 }

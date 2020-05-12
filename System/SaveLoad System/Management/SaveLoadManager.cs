@@ -103,17 +103,17 @@ public class SaveLoadManager : MonoBehaviour
         Section unnecessarySection = new Section("Unnecessary", new List<EntityData> { new EntityData() { Name = "Ent3", ReferenceId = "3" } });
         Section otherSection = new Section("Other", new List<EntityData> { new EntityData() { Name = "Ent4", ReferenceId = "4" } });
 
-        SaveFile save = CreateSaveFile("Test", dataBuffer, unnecessarySection);
-        WriteSave(save);
-        LoadSave("Test");
+        SaveFile save = CreateSaveFile("SomeSavefile", dataBuffer, unnecessarySection);
+        WriteSave(save, true);
+        LoadSave("SomeSavefile");
         Debug.Log(CurrentSave.Name);
         Debug.Log(CurrentSave.GetAllSections().Count);
 
         CurrentSave.RemoveSection("Unnecessary");
         CurrentSave.AddSection(otherSection);
 
-        WriteSave(CurrentSave);
-        LoadSave("Test");
+        WriteSave(CurrentSave, true);
+        LoadSave("SomeSavefile");
         Debug.Log(CurrentSave.GetAllSections()[0].GetAllDataOfType<ActorData>()[0].Stats["Health"]);
     }
 
@@ -159,7 +159,8 @@ public class SaveLoadManager : MonoBehaviour
     /// Write <see cref="SaveFile"/> (if savefile doesn't exist - create one) to the savefiles path.
     /// </summary>
     /// <param name="save">Savefile to write</param>
-    public void WriteSave(SaveFile save)
+    /// <param name="createJsonFile">Do we need to create json file with savefile data? (Useful when debugging)</param>
+    public void WriteSave(SaveFile save, bool createJsonFile = false)
     {
         if (save == null)
         {
@@ -172,6 +173,11 @@ public class SaveLoadManager : MonoBehaviour
             Directory.CreateDirectory(SaveFilesPath);
         File.WriteAllText(SaveFilesPath + save.Name + ".txt", data);
         OnFileWritingComplete?.Invoke("File was successfuly writen.");
+
+        if(createJsonFile)
+        {
+            File.WriteAllText(SaveFilesPath + save.Name + "Json" + ".json", save.ToJson(false));
+        }
     }
 
     /// <summary>
@@ -197,14 +203,14 @@ public class SaveLoadManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log("Error appeared during savefile loading. Error message:\n" + e.Message);
+            Debug.LogWarning("Error appeared during savefile loading. Error message:\n" + e.Message);
             OnFileLoadingFail?.Invoke("Error appeared during savefile loading.");
             return false;
         }
     }
 
     /// <summary>
-    /// Remove data from buffer (if buffer contains it).
+    /// Remove data from the buffer (if buffer contains it).
     /// </summary>
     /// <param name="data">Data to remove</param>
     public void RemoveSaveData(EntityData data)
