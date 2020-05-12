@@ -7,4 +7,11 @@ using System;
 public class PlayerData : ActorData
 {
     public List<string> Inventory;
+
+    public override string ToString()
+    {
+        var result = $"Player {Name} - {ReferenceId} with inventory:\n";
+        Inventory.ForEach(x => result += $"    {x}\n");
+        return result;
+    }
 }

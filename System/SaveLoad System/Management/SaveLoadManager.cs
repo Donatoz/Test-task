@@ -96,13 +96,19 @@ public class SaveLoadManager : MonoBehaviour
     /// </summary>
     private void DebugSave()
     {
+        // Arranging data for debugging
         Dictionary<string, int> testStats = new Dictionary<string, int>();
         testStats["Health"] = 10;
+        List<string> testInventory = new List<string> { "Item1", "Item2" };
+        List<EntityData> entitiesList = new List<EntityData> { new ActorData() { Name = "SomeActor", ReferenceId = "123", Stats = testStats } };
         dataBuffer.Add(new EntityData() { Name = "Ent1", ReferenceId = "1" });
-        dataBuffer.Add(new ActorData() { Name = "Ent2", ReferenceId = "2", Stats = testStats });
+        dataBuffer.Add(new ActorData() { Name = "Actor", ReferenceId = "Ac1", Stats = testStats });
+        dataBuffer.Add(new PlayerData() { Name = "Player", ReferenceId = "Pl1", Stats = testStats, Inventory = testInventory });
+        dataBuffer.Add(new NpcData() { Name = "Npc", ReferenceId = "Np1", Stats = testStats, SomeList = entitiesList });
         Section unnecessarySection = new Section("Unnecessary", new List<EntityData> { new EntityData() { Name = "Ent3", ReferenceId = "3" } });
         Section otherSection = new Section("Other", new List<EntityData> { new EntityData() { Name = "Ent4", ReferenceId = "4" } });
 
+        // Doing some actions with savefiles
         SaveFile save = CreateSaveFile("SomeSavefile", dataBuffer, unnecessarySection);
         WriteSave(save, true);
         LoadSave("SomeSavefile");
@@ -112,6 +118,15 @@ public class SaveLoadManager : MonoBehaviour
 
         WriteSave(CurrentSave, true);
         LoadSave("SomeSavefile");
+
+        // Debugging
+        Debug.Log("-------------------");
+        Debug.Log($"Current save: {CurrentSave.Name}");
+        var main = CurrentSave.FindSection("Main");
+        Debug.Log(main.GetAllDataOfType<EntityData>()[0].ToString());
+        Debug.Log(main.GetAllDataOfType<ActorData>()[0].ToString());
+        Debug.Log(main.GetAllDataOfType<PlayerData>()[0].ToString());
+        Debug.Log(main.GetAllDataOfType<NpcData>()[0].ToString());
     }
 
     /// <summary>

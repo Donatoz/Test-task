@@ -30,7 +30,10 @@ public struct Section
     public Section(string sectionId, List<EntityData> data)
     {
         SectionId = sectionId;
-        content = data;
+        if (data != null)
+            content = data;
+        else
+            content = new List<EntityData>();
     }
 
     /// <summary>

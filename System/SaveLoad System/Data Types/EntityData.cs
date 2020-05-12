@@ -12,4 +12,9 @@ public class EntityData
 {
     public string Name;
     public string ReferenceId;
+
+    public override string ToString()
+    {
+        return $"Entity {Name} - {ReferenceId}";
+    }
 }
