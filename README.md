@@ -8,4 +8,4 @@
 ### Unity packages used:
  - 2D Sprite
  
- #### This repo will be closed when the tasks will be checked.
+ #### This repo will be closed when the tasks are checked.
